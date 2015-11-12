@@ -1,12 +1,16 @@
 
 SpaceShip ship = new SpaceShip();
+Asteroid[] rock;
 Star[] nStar;
 
 
 public void setup() {
     size(600, 600);
     background(0);
-
+    rock = new Asteroid[8];
+    for (int i = 0; i < rock.length; i++) {
+        rock[i] = new Asteroid();
+    }
     nStar = new Star[100];
 
     for (int i = 0; i < nStar.length; i++) {
@@ -18,9 +22,15 @@ public void draw() {
     for (int i = 0; i < nStar.length; i++) {
         nStar[i].show();
     }
+    for (int i = 0; i < rock.length; i++) {
+        rock[i].move();
+        rock[i].show();
+    }
     ship.controls();
     ship.show();
     ship.move();
+
+
 
 
 
@@ -28,39 +38,68 @@ public void draw() {
 
 
 class Asteroid extends Floater {
-   public void accelerate(double dAmount) {
-        //convert the current direction the floater is pointing to radians    
-        double dRadians = myPointDirection * (Math.PI / 180);
-        //change coordinates of direction of travel    
-        myDirectionX += ((dAmount) * Math.cos(dRadians));
-        myDirectionY += ((dAmount) * Math.sin(dRadians));
-    }
-    public void rotate(int nDegreesOfRotation) {
-        //rotates the floater by a given number of degrees    
-        myPointDirection += nDegreesOfRotation;
-    }
-    public void move() //move the floater in the current direction of travel
-        {
-            //change the x and y coordinates by myDirectionX and myDirectionY       
-            myCenterX += myDirectionX;
-            myCenterY += myDirectionY;
+    public void setX(int x) {myCenterX = x;}
+    public int getX() {return (int) myCenterX;}
+    public void setY(int y) {myCenterY = y;}
+    public int getY() {return (int) myCenterY;}
+    public void setDirectionX(double x) {myDirectionX = x;}
+    public double getDirectionX() {return myDirectionX;}
+    public void setDirectionY(double y) {myDirectionY = y;}
+    public double getDirectionY() {return myDirectionY;}
+    public void setPointDirection(int degrees) {myPointDirection = degrees;}
+    public double getPointDirection() {return myPointDirection;}
+    public int rotAsteroid;
+    public int sizeA, speed;
+    public double ang;
+    Asteroid() {
+      sizeA = 8;
+      if(Math.random()>0.5){
+        rotAsteroid = (int)(Math.random()*2+1);
+      } else {
+        rotAsteroid = -(int)(Math.random()*2+1);
+      }
+      
+      corners = 8;
+      xCorners = new int[corners];
+      yCorners = new int[corners];
+      xCorners[0] = (int)(Math.random()*3*sizeA+3);
+      yCorners[0] = -(int)(Math.random()*2*sizeA+3);
+      xCorners[1] = (int)(Math.random()*5*sizeA+3);
+      yCorners[1] = (int)(Math.random()*1*sizeA+3);
+      xCorners[2] = (int)(Math.random()*3*sizeA+3);
+      yCorners[2] = (int)(Math.random()*4*sizeA+3);
+      xCorners[3] = (int)(Math.random()*0*sizeA+3);
+      yCorners[3] = (int)(Math.random()*2*sizeA+3);
+      xCorners[4] = -(int)(Math.random()*2*sizeA+3);
+      yCorners[4] = (int)(Math.random()*3*sizeA+3);
+      xCorners[5] = -(int)(Math.random()*4*sizeA+3);
+      yCorners[5] = (int)(Math.random()*0*sizeA+3);
+      xCorners[6] = -(int)(Math.random()*2*sizeA+3);
+      yCorners[6] = -(int)(Math.random()*3*sizeA+3);
+      xCorners[7] = (int)(Math.random()*1*sizeA+3);
+      yCorners[7] = -(int)(Math.random()*2*sizeA+3);
 
-            //wrap around screen    
-            if (myCenterX > width) {
-                myCenterX = 0;
-            } else if (myCenterX < 0) {
-                myCenterX = width;
-            }
-            if (myCenterY > height) {
-                myCenterY = 0;
-            } else if (myCenterY < 0) {
-                myCenterY = height;
-            }
+
+      myCenterX = (int)(Math.random()*600);
+      myCenterY = (int)(Math.random()*600);
+      speed = 1;
+      ang = Math.random()*2*Math.PI;
+      myDirectionX = Math.cos(ang)*speed;
+      myDirectionY = Math.sin(ang)*speed; 
+      myPointDirection = 0;
+    }
+
+
+
+    public void move() 
+        { 
+           rotate(rotAsteroid); 
+           super.move();
         }
     public void show() //Draws the floater at the current position  
         {
-            fill(myColor);
-            stroke(myColor);
+            fill(255);
+            
             //convert degrees to radians for sin and cos         
             double dRadians = myPointDirection * (Math.PI / 180);
             int xRotatedTranslated, yRotatedTranslated;
@@ -74,7 +113,7 @@ class Asteroid extends Floater {
             endShape(CLOSE);
         }
 }
-}
+
 
 class SpaceShip extends Floater {
 
