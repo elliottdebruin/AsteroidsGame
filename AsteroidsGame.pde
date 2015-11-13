@@ -117,7 +117,7 @@ class Asteroid extends Floater {
 
 class SpaceShip extends Floater {
 
-    SpaceShip() {
+    public SpaceShip() {
 
         corners = 55;
         xCorners = new int[corners];
@@ -479,9 +479,9 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
         }
 }
 class Star {
-    int x;
-    int y;
-    Star() {
+    private int x;
+    private int y;
+    public Star() {
         x = (int)(Math.random() * 600);
         y = (int)(Math.random() * 600);
     }
