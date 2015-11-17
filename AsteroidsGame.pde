@@ -1,18 +1,14 @@
 
 SpaceShip ship = new SpaceShip();
 ArrayList<Asteroid> rocks;
-
 Star[] nStar;
-
+public boolean gameOver = true;
 
 public void setup() {
     size(600, 600);
     background(0);
 
     rocks = new ArrayList<Asteroid>();
-
-    
-    
     nStar = new Star[100];
 
     for (int i = 0; i < nStar.length; i++) {
@@ -20,44 +16,52 @@ public void setup() {
     }
 }
 public void draw() {
-    background(0);
-    for (int i = 0; i < nStar.length; i++) {
-        nStar[i].show();
+    //GAMEOVER SCREEN
+    if(gameOver == true){
+      background(255, 0, 0);
+
+      //TEXT AND BUTTON
+      textSize(75);
+      text("GAME OVER", 85, 150, 600, 600);
+      fill(0);
+      rect(150,400,300,100,20);
+      fill(255);
+      textSize(50);
+      text("TRY AGAIN", 170, 420, 600, 600);
+
+      //TRY AGAIN BUTTON
+      if(mousePressed && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
+        gameOver = false;
+      }
     }
-    
-if(rocks.size()<8){
-  rocks.add(new Asteroid());
-}
-for(int i = 0; i < rocks.size(); i++){
-  rocks.get(i).move();
-  rocks.get(i).show();
-}
-    ship.controls();
-    ship.show();
-    ship.move();
-
-
-
-
-
+    if(gameOver == false){
+      background(0);
+      //CREATES ARRAY OF STARS
+      for (int i = 0; i < nStar.length; i++) {
+        nStar[i].show();
+      }
+      //ADDS ASTEROIDS IF THERE ARE LESS THAN 8
+      if(rocks.size()<8){
+        rocks.add(new Asteroid());
+      }
+      //DRAWS AND MOVES ASTEROIDS
+      for(int i = 0; i < rocks.size(); i++){
+        rocks.get(i).move();
+        rocks.get(i).show();
+      }
+      //CREATES SPACESHIP
+      ship.controls();
+      ship.show();
+      ship.move();
+    }
 }
 
 
 class Asteroid extends Floater {
-    public void setX(int x) {myCenterX = x;}
-    public int getX() {return (int) myCenterX;}
-    public void setY(int y) {myCenterY = y;}
-    public int getY() {return (int) myCenterY;}
-    public void setDirectionX(double x) {myDirectionX = x;}
-    public double getDirectionX() {return myDirectionX;}
-    public void setDirectionY(double y) {myDirectionY = y;}
-    public double getDirectionY() {return myDirectionY;}
-    public void setPointDirection(int degrees) {myPointDirection = degrees;}
-    public double getPointDirection() {return myPointDirection;}
-    public int rotAsteroid;
-    public int sizeA, speed;
-    public double ang;
-    Asteroid() {
+
+    
+
+    public Asteroid() {
       sizeA = 8;
       if(Math.random()>0.5){
         rotAsteroid = (int)(Math.random()*2+1);
@@ -93,30 +97,35 @@ class Asteroid extends Floater {
       myDirectionX = Math.cos(ang)*speed;
       myDirectionY = Math.sin(ang)*speed; 
       myPointDirection = 0;
+      myColor = color(255);
     }
 
+    //ASTEROID GETTERS AND SETTERS
+    public void setX(int x) {myCenterX = x;}
+    public int getX() {return (int) myCenterX;}
+    public void setY(int y) {myCenterY = y;}
+    public int getY() {return (int) myCenterY;}
+    public void setDirectionX(double x) {myDirectionX = x;}
+    public double getDirectionX() {return myDirectionX;}
+    public void setDirectionY(double y) {myDirectionY = y;}
+    public double getDirectionY() {return myDirectionY;}
+    public void setPointDirection(int degrees) {myPointDirection = degrees;}
+    public double getPointDirection() {return myPointDirection;}
+    public void setColor(color rgb) {myColor = rgb;}
+    public color getColor() {return myColor;}
+    public int rotAsteroid;
+    public int sizeA, speed;
+    public double ang;
 
 
     public void move() 
         { 
-           rotate(rotAsteroid); 
-           super.move();
+          rotate(rotAsteroid); 
+          super.move();
         }
     public void show() //Draws the floater at the current position  
         {
-            fill(255);
-            
-            //convert degrees to radians for sin and cos         
-            double dRadians = myPointDirection * (Math.PI / 180);
-            int xRotatedTranslated, yRotatedTranslated;
-            beginShape();
-            for (int nI = 0; nI < corners; nI++) {
-                //rotate and translate the coordinates of the floater using current direction 
-                xRotatedTranslated = (int)((xCorners[nI] * Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians)) + myCenterX);
-                yRotatedTranslated = (int)((xCorners[nI] * Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians)) + myCenterY);
-                vertex(xRotatedTranslated, yRotatedTranslated);
-            }
-            endShape(CLOSE);
+          super.show();
         }
 }
 
@@ -125,6 +134,7 @@ class SpaceShip extends Floater {
 
     public SpaceShip() {
 
+        //SPACESHIP
         corners = 55;
         xCorners = new int[corners];
         yCorners = new int[corners];
@@ -316,19 +326,19 @@ class SpaceShip extends Floater {
             myCenterX += myDirectionX;
             myCenterY += myDirectionY;
 
-
+            //FIRST QUADRANT
             if (mouseX > ship.getX() && mouseY < ship.getY()) {
                 myPointDirection = (-1) * (180 / Math.PI) * Math.atan(Math.abs((double) mouseY - (double) ship.getY()) / Math.abs((double) mouseX - (double) ship.getX()));
             }
-            //second quadrant
+            //SECOND QUADRANT
             if (mouseX < ship.getX() && mouseY < ship.getY()) {
                 myPointDirection = 180 + (180 / Math.PI) * Math.atan(Math.abs((double) mouseY - (double) ship.getY()) / Math.abs((double) mouseX - (double) ship.getX()));
             }
-            //third quadrant
+            //THIRD QUADRANT
             if (mouseX < ship.getX() && mouseY > ship.getY()) {
                 myPointDirection = 180 - (180 / Math.PI) * Math.atan(Math.abs((double) mouseY - (double) ship.getY()) / Math.abs((double) mouseX - (double) ship.getX()));
             }
-            //fourth quadrant
+            //FOURTH QUADRANT
             if (mouseX > ship.getX() && mouseY > ship.getY()) {
                 myPointDirection = (180 / Math.PI) * Math.atan(Math.abs((double) mouseY - (double) ship.getY()) / Math.abs((double) mouseX - (double) ship.getX()));
             }
@@ -394,21 +404,7 @@ class SpaceShip extends Floater {
     public void show() {
         fill(myColor);
         stroke(myColor);
-
-
-
-        //convert degrees to radians for sin and cos         
-        double dRadians = myPointDirection * (Math.PI / 180);
-        int xRotatedTranslated, yRotatedTranslated;
-        beginShape();
-        for (int nI = 0; nI < corners; nI++) {
-            //rotate and translate the coordinates of the floater using current direction 
-            xRotatedTranslated = (int)((xCorners[nI] * Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians)) + myCenterX);
-            yRotatedTranslated = (int)((xCorners[nI] * Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians)) + myCenterY);
-            vertex(xRotatedTranslated, yRotatedTranslated);
-        }
-        endShape(CLOSE);
-
+        super.show();
     }
 }
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
