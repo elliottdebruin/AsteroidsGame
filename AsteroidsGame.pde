@@ -1,59 +1,111 @@
 
 SpaceShip ship = new SpaceShip();
 ArrayList<Asteroid> rocks;
+ArrayList<Bullet> bullets;
 Star[] nStar;
-public boolean gameOver = true;
+public boolean gameOver = false;
+public boolean startGame = false;
+public boolean instructions = false;
 
 public void setup() {
     size(600, 600);
     background(0);
 
     rocks = new ArrayList<Asteroid>();
+    bullets = new ArrayList<Bullet>();
     nStar = new Star[100];
 
     for (int i = 0; i < nStar.length; i++) {
         nStar[i] = new Star();
     }
 }
-public void draw() {
-    //GAMEOVER SCREEN
-    if(gameOver == true){
-      background(255, 0, 0);
-
-      //TEXT AND BUTTON
-      textSize(75);
-      text("GAME OVER", 85, 150, 600, 600);
-      fill(0);
-      rect(150,400,300,100,20);
-      fill(255);
-      textSize(50);
-      text("TRY AGAIN", 170, 420, 600, 600);
-
+public void mousePressed () {
       //TRY AGAIN BUTTON
-      if(mousePressed && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
+      if(startGame == true && gameOver == true && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
         gameOver = false;
       }
+      //START GAME BUTTON
+      if(startGame == false && gameOver == false && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
+        startGame = true;
+      }
+      if(startGame == false && gameOver == false && mouseX>150 && mouseX<450 && mouseY>510 && mouseY<550){
+        instructions = true;
+      }
+      if(mousePressed == true && gameOver == false){
+        bullets.add(new Bullet(ship));
+      }
+}
+public void draw() {
+  if(startGame == false){
+    background(50);
+    textSize(75);
+    text("ASTEROIDS", 90, 120, 600, 600);
+
+    //START BUTTON
+    fill(0);
+    rect(150,400,300,100,20);
+    fill(255);
+    textSize(50);
+    text("Start Game", 170, 420, 600, 600);
+
+    fill(0);
+    rect(150,510,300,50,20);
+    fill(255);
+    textSize(40);
+    text("Intructions", 195, 510, 600, 600);
+
+    if(instructions == true){
+      background(50);
     }
-    if(gameOver == false){
-      background(0);
-      //CREATES ARRAY OF STARS
-      for (int i = 0; i < nStar.length; i++) {
-        nStar[i].show();
+  }
+
+
+  if(startGame == true){
+      //GAMEOVER SCREEN
+      if(gameOver == true){
+        background(255, 0, 0);
+
+        //TEXT AND BUTTON
+        textSize(75);
+        text("GAME OVER", 85, 150, 600, 600);
+        fill(0);
+        rect(150,400,300,100,20);
+        fill(255);
+        textSize(50);
+        text("TRY AGAIN", 170, 420, 600, 600);
+
+        
       }
-      //ADDS ASTEROIDS IF THERE ARE LESS THAN 8
-      if(rocks.size()<8){
-        rocks.add(new Asteroid());
+      if(gameOver == false){
+        background(0);
+        //CREATES ARRAY OF STARS
+        for (int i = 0; i < nStar.length; i++) {
+          nStar[i].show();
+        }
+        //ADDS ASTEROIDS IF THERE ARE LESS THAN 8
+        if(rocks.size()<8){
+          rocks.add(new Asteroid());
+        }
+        //DRAWS AND MOVES ASTEROIDS
+        for(int i = 0; i < rocks.size(); i++){
+          rocks.get(i).move();
+          rocks.get(i).show();
+        }
+        
+
+        //CREATES SPACESHIP
+        ship.controls();
+        ship.show();
+        ship.move();
+        //CREATES BULLETS    
+        for(int i = 0; i < bullets.size(); i++){
+          bullets.get(i).move();
+          bullets.get(i).showBullet();
+
+        
+        }
       }
-      //DRAWS AND MOVES ASTEROIDS
-      for(int i = 0; i < rocks.size(); i++){
-        rocks.get(i).move();
-        rocks.get(i).show();
-      }
-      //CREATES SPACESHIP
-      ship.controls();
-      ship.show();
-      ship.move();
-    }
+  }
 }
 
 
@@ -407,8 +459,39 @@ class SpaceShip extends Floater {
         super.show();
     }
 }
-abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
-{
+
+class Bullet extends Floater {
+    public double dRadians;
+    public Bullet(SpaceShip theShip) {
+        myCenterX = theShip.getX();
+        myCenterY = theShip.getY();
+        myPointDirection = theShip.getPointDirection();
+        dRadians = myPointDirection*(Math.PI/180);
+        myDirectionX = 5*Math.cos(dRadians) + theShip.getDirectionX();
+        myDirectionY = 5*Math.sin(dRadians) + theShip.getDirectionY();
+    }
+    public void setX(int x) {myCenterX = x;}
+    public int getX() {return (int) myCenterX;}
+    public void setY(int y) {myCenterY = y;}
+    public int getY() {return (int) myCenterY;}
+    public void setDirectionX(double x) {myDirectionX = x;}
+    public double getDirectionX() {return myDirectionX;}
+    public void setDirectionY(double y) {myDirectionY = y;}
+    public double getDirectionY() {return myDirectionY;}
+    public void setPointDirection(int degrees) {myPointDirection = degrees;}
+    public double getPointDirection() {return myPointDirection;}
+
+    public void move() {
+        myCenterX += myDirectionX;    
+        myCenterY += myDirectionY;
+    }
+    public void showBullet() {
+        fill(0,0,255);
+        ellipse((float)myCenterX, (float)myCenterY, 5, 5);
+    }
+}
+ //Do NOT modify the Floater class! Make changes in the SpaceShip class
+abstract class Floater {
     protected int corners; //the number of corners, a triangular floater has 3   
     protected int[] xCorners;
     protected int[] yCorners;
@@ -480,6 +563,7 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
             endShape(CLOSE);
         }
 }
+
 class Star {
     private int x;
     private int y;
