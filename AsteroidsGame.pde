@@ -31,12 +31,17 @@ public void mousePressed () {
       if(startGame == false && gameOver == false && mouseX>150 && mouseX<450 && mouseY>510 && mouseY<550){
         instructions = true;
       }
+      if(instructions == true && mouseX>430 && mouseX<530 && mouseY>530 && mouseY<580){
+        instructions = false;
+        startGame = false;
+      }
       if(mousePressed == true && gameOver == false){
         bullets.add(new Bullet(ship));
       }
 }
 public void draw() {
   if(startGame == false){
+
     background(50);
     textSize(75);
     text("ASTEROIDS", 90, 120, 600, 600);
@@ -56,6 +61,20 @@ public void draw() {
 
     if(instructions == true){
       background(50);
+      textAlign(CENTER);
+      textSize(50);
+      text("Controls", 0, 100, 600, 600);
+      textSize(35);
+      text("W = accelerate forward", 0, 175, 600, 600);
+      text("S = decelerate", 0, 250, 600, 600);
+      text("D = stop", 0, 325, 600, 600);
+      text("SPACE = hyperspace", 0, 400, 600, 600);
+      fill(0);
+      rect(480,530,100,50,20);
+      fill(255);
+      textAlign(RIGHT);
+      text("Back", -30, 534, 600, 600);
+      textAlign(LEFT);
     }
   }
 
@@ -82,17 +101,34 @@ public void draw() {
         for (int i = 0; i < nStar.length; i++) {
           nStar[i].show();
         }
+        
         //ADDS ASTEROIDS IF THERE ARE LESS THAN 8
         if(rocks.size()<8){
           rocks.add(new Asteroid());
         }
         //DRAWS AND MOVES ASTEROIDS
-        for(int i = 0; i < rocks.size(); i++){
-          rocks.get(i).move();
-          rocks.get(i).show();
-        }
+        for(int r = 0; r < rocks.size(); r++){
+          rocks.get(r).move();
+          rocks.get(r).show();
         
+          for(int b = 0; b < bullets.size(); b++){
+            if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)bullets.get(b).getX(), (float)bullets.get(b).getY())<20){
+            
+              rocks.remove(r);
+              bullets.remove(b);
+              break;
+            }
+            if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)ship.getX(), (float)ship.getY())<20){
+            
+              gameOver = true;
+              ship.setX(300);
+              ship.setY(300);
+              ship.setDirectionX(0);
+              ship.setDirectionY(0);
+            }
 
+          }
+        }
         //CREATES SPACESHIP
         ship.controls();
         ship.show();
@@ -101,6 +137,7 @@ public void draw() {
         for(int i = 0; i < bullets.size(); i++){
           bullets.get(i).move();
           bullets.get(i).showBullet();
+        
 
         
         }
@@ -142,8 +179,8 @@ class Asteroid extends Floater {
       yCorners[7] = -(int)(Math.random()*2*sizeA+3);
 
 
-      myCenterX = (int)(Math.random()*600);
-      myCenterY = (int)(Math.random()*600);
+      myCenterX = (int)(Math.random()*-20);
+      myCenterY = (int)(Math.random()*-20);
       speed = 1;
       ang = Math.random()*2*Math.PI;
       myDirectionX = Math.cos(ang)*speed;
