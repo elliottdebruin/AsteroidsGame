@@ -6,11 +6,12 @@ Star[] nStar;
 public boolean gameOver = false;
 public boolean startGame = false;
 public boolean instructions = false;
+public int score;
 
 public void setup() {
     size(600, 600);
     background(0);
-
+    score = 0;
     rocks = new ArrayList<Asteroid>();
     bullets = new ArrayList<Bullet>();
     nStar = new Star[100];
@@ -23,6 +24,7 @@ public void mousePressed () {
       //TRY AGAIN BUTTON
       if(startGame == true && gameOver == true && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
         gameOver = false;
+        score = 0;
       }
       //START GAME BUTTON
       if(startGame == false && gameOver == false && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
@@ -116,7 +118,10 @@ public void draw() {
             
               rocks.remove(r);
               bullets.remove(b);
+              score = score + 10;
               break;
+              
+
             }
             if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)ship.getX(), (float)ship.getY())<20){
             
@@ -137,10 +142,8 @@ public void draw() {
         for(int i = 0; i < bullets.size(); i++){
           bullets.get(i).move();
           bullets.get(i).showBullet();
-        
-
-        
         }
+        text("Score: " + score, 10, 10, 600, 600);
       }
   }
 }
@@ -181,7 +184,7 @@ class Asteroid extends Floater {
 
       myCenterX = (int)(Math.random()*-20);
       myCenterY = (int)(Math.random()*-20);
-      speed = 1;
+      speed = 1 +score/50;
       ang = Math.random()*2*Math.PI;
       myDirectionX = Math.cos(ang)*speed;
       myDirectionY = Math.sin(ang)*speed; 
@@ -217,6 +220,8 @@ class Asteroid extends Floater {
           super.show();
         }
 }
+
+
 
 
 class SpaceShip extends Floater {
