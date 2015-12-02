@@ -1,7 +1,9 @@
 
 SpaceShip ship = new SpaceShip();
+UFO ufo = new UFO();
 ArrayList<Asteroid> rocks;
 ArrayList<Bullet> bullets;
+ArrayList<Laser> lasers;
 Star[] nStar;
 public boolean gameOver = false;
 public boolean startGame = false;
@@ -14,6 +16,7 @@ public void setup() {
     score = 0;
     rocks = new ArrayList<Asteroid>();
     bullets = new ArrayList<Bullet>();
+    lasers = new ArrayList<Laser>();
     nStar = new Star[100];
 
     for (int i = 0; i < nStar.length; i++) {
@@ -108,6 +111,10 @@ public void draw() {
         if(rocks.size()<8){
           rocks.add(new Asteroid());
         }
+        if(score>50){
+          ufo.move();
+          ufo.show();
+        }
         //DRAWS AND MOVES ASTEROIDS
         for(int r = 0; r < rocks.size(); r++){
           rocks.get(r).move();
@@ -115,7 +122,10 @@ public void draw() {
         
           for(int b = 0; b < bullets.size(); b++){
             if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)bullets.get(b).getX(), (float)bullets.get(b).getY())<20){
-            
+              
+              if(score>50){
+                lasers.add(new Laser(ufo));
+              }
               rocks.remove(r);
               bullets.remove(b);
               score = score + 10;
@@ -142,6 +152,10 @@ public void draw() {
         for(int i = 0; i < bullets.size(); i++){
           bullets.get(i).move();
           bullets.get(i).showBullet();
+        }
+        for(int i = 0; i < lasers.size(); i++){
+          lasers.get(i).move();
+          lasers.get(i).showLaser();
         }
         text("Score: " + score, 10, 10, 600, 600);
       }
@@ -184,7 +198,7 @@ class Asteroid extends Floater {
 
       myCenterX = (int)(Math.random()*-20);
       myCenterY = (int)(Math.random()*-20);
-      speed = 1 +score/50;
+      speed = 1 + (score/100);
       ang = Math.random()*2*Math.PI;
       myDirectionX = Math.cos(ang)*speed;
       myDirectionY = Math.sin(ang)*speed; 
@@ -206,8 +220,8 @@ class Asteroid extends Floater {
     public void setColor(color rgb) {myColor = rgb;}
     public color getColor() {return myColor;}
     public int rotAsteroid;
-    public int sizeA, speed;
-    public double ang;
+    public int sizeA;
+    public double ang, speed;
 
 
     public void move() 
@@ -222,7 +236,164 @@ class Asteroid extends Floater {
 }
 
 
+class UFO extends Floater {
+  double theta = 0;
+  public UFO() {
+    
+    corners = 33;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+        xCorners[0] = 14;
+        yCorners[0] = 0;
+        xCorners[1] = 13;
+        yCorners[1] = 1;
+        xCorners[2] = 12;
+        yCorners[2] = 1;
+        xCorners[3] = 11;
+        yCorners[3] = 2;
+        xCorners[4] = 5;
+        yCorners[4] = 2;
+        xCorners[5] = 3;
+        yCorners[5] = 4;
+        xCorners[6] = 2;
+        yCorners[6] = 4;
+        xCorners[7] = 0;
+        yCorners[7] = 6;
+        xCorners[8] = 0;
+        yCorners[8] = 7;
+        xCorners[9] = 2;
+        yCorners[9] = 12;
+        xCorners[10] = 9;
+        yCorners[10] = 12;
+        xCorners[11] = 9;
+        yCorners[11] = 13;
+        xCorners[12] = 0;
+        yCorners[12] = 13;
+        xCorners[13] = -6;
+        yCorners[13] = 7;
+        xCorners[14] = -7;
+        yCorners[14] = 4;
+        xCorners[15] = -8;
+        yCorners[15] = 3;
+        xCorners[16] = -6;
+        yCorners[16] = 2;
 
+        xCorners[17] = -6;
+        yCorners[17] = -2;
+        xCorners[18] = -8;
+        yCorners[18] = -3;
+        xCorners[19] = -7;
+        yCorners[19] = -4;
+        xCorners[20] = -6;
+        yCorners[20] = -7;
+        xCorners[21] = 0;
+        yCorners[21] = -13;
+        xCorners[22] = 9;
+        yCorners[22] = -13;
+        xCorners[23] = 9;
+        yCorners[23] = -12;
+        xCorners[24] = 2;
+        yCorners[24] = -12;
+        xCorners[25] = 0;
+        yCorners[25] = -7;
+        xCorners[26] = 0;
+        yCorners[26] = -6;
+        xCorners[27] = 2;
+        yCorners[27] = -4;
+        xCorners[28] = 3;
+        yCorners[28] = -4;
+        xCorners[29] = 5;
+        yCorners[29] = -2;
+        xCorners[30] = 11;
+        yCorners[30] = -2;
+        xCorners[31] = 12;
+        yCorners[31] = -1;
+        xCorners[32] = 13;
+        yCorners[32] = -1;
+       
+
+     myColor = color(0,0,255);
+
+        myCenterX = ship.getX() + 100*Math.cos(theta);
+        myCenterY = ship.getY() + 100*Math.sin(theta);
+        myDirectionX = ship.getDirectionX();
+        myDirectionY = ship.getDirectionY();
+        myPointDirection = 0;
+  }
+    public void setX(int x) {myCenterX = x;}
+    public int getX() {return (int) myCenterX;}
+    public void setY(int y) {myCenterY = y;}
+    public int getY() {return (int) myCenterY;}
+    public void setDirectionX(double x) {myDirectionX = x;}
+    public double getDirectionX() {return myDirectionX;}
+    public void setDirectionY(double y) {myDirectionY = y;}
+    public double getDirectionY() {return myDirectionY;}
+    public void setPointDirection(int degrees) {myPointDirection = degrees;}
+    public double getPointDirection() {return myPointDirection;}
+    public void setColor(color rgb) {myColor = rgb;}
+    public color getColor() {return myColor;}
+
+    public void accelerate(double dAmount) {
+
+        double dRadians = myPointDirection * (Math.PI / 180);
+        //change coordinates of direction of travel    
+        myDirectionX += ((dAmount) * Math.cos(dRadians));
+        myDirectionY += ((dAmount) * Math.sin(dRadians));
+        if(myDirectionX > 10){
+          myDirectionX = 10;
+        }
+        if(myDirectionY > 10){
+          myDirectionY = 10;
+        }
+    }
+
+
+    public void move() //move the floater in the current direction of travel
+        {
+
+            //change the x and y coordinates by myDirectionX and myDirectionY       
+              myCenterX = ship.getX() + 250*Math.cos(theta);
+              myCenterY = ship.getY() + 150*Math.sin(theta);
+              theta = theta + 0.02;
+
+            //FIRST QUADRANT
+            if (ufo.getX() < ship.getX() && ufo.getY() > ship.getY()) {
+                myPointDirection = (-1) * (180 / Math.PI) * Math.atan(Math.abs((double) ship.getY() - (double) ufo.getY()) / Math.abs((double) ship.getX() - (double) ufo.getX()));
+            }
+            //SECOND QUADRANT
+            if (ufo.getX() > ship.getX() && ufo.getY() > ship.getY()) {
+                myPointDirection = 180 + (180 / Math.PI) * Math.atan(Math.abs((double) ship.getY() - (double) ufo.getY()) / Math.abs((double) ship.getX() - (double) ufo.getX()));
+            }
+            //THIRD QUADRANT
+            if (ufo.getX() > ship.getX() && ufo.getY() < ship.getY()) {
+                myPointDirection = 180 - (180 / Math.PI) * Math.atan(Math.abs((double) ship.getY() - (double) ufo.getY()) / Math.abs((double) ship.getX() - (double) ufo.getX()));
+            }
+            //FOURTH QUADRANT
+            if (ufo.getX() < ship.getX() && ufo.getY() < ship.getY()) {
+                myPointDirection = (180 / Math.PI) * Math.atan(Math.abs((double) ship.getY() - (double) ufo.getY()) / Math.abs((double) ship.getX() - (double) ufo.getX()));
+            }
+
+            //wrap around screen    
+            if (myCenterX > width) {
+                myCenterX = 0;
+            } else if (myCenterX < 0) {
+                myCenterX = width;
+            }
+            if (myCenterY > height) {
+                myCenterY = 0;
+            } else if (myCenterY < 0) {
+                myCenterY = height;
+            }
+        }
+
+
+
+    public void show() {
+        fill(myColor);
+        stroke(myColor);
+        super.show();
+    }
+}
 
 class SpaceShip extends Floater {
 
@@ -408,11 +579,7 @@ class SpaceShip extends Floater {
           myDirectionY = 10;
         }
     }
-    public void rotate(int nDegreesOfRotation) {
 
-
-        myPointDirection += nDegreesOfRotation;
-    }
     public void move() //move the floater in the current direction of travel
         {
 
@@ -499,6 +666,37 @@ class SpaceShip extends Floater {
         fill(myColor);
         stroke(myColor);
         super.show();
+    }
+}
+
+class Laser extends Floater {
+    public double dRadians;
+    public Laser(UFO theUFO) {
+        myCenterX = theUFO.getX();
+        myCenterY = theUFO.getY();
+        myPointDirection = theUFO.getPointDirection();
+        dRadians = myPointDirection*(Math.PI/180);
+        myDirectionX = 5*Math.cos(dRadians) + theUFO.getDirectionX();
+        myDirectionY = 5*Math.sin(dRadians) + theUFO.getDirectionY();
+    }
+    public void setX(int x) {myCenterX = x;}
+    public int getX() {return (int) myCenterX;}
+    public void setY(int y) {myCenterY = y;}
+    public int getY() {return (int) myCenterY;}
+    public void setDirectionX(double x) {myDirectionX = x;}
+    public double getDirectionX() {return myDirectionX;}
+    public void setDirectionY(double y) {myDirectionY = y;}
+    public double getDirectionY() {return myDirectionY;}
+    public void setPointDirection(int degrees) {myPointDirection = degrees;}
+    public double getPointDirection() {return myPointDirection;}
+
+    public void move() {
+        myCenterX += myDirectionX;    
+        myCenterY += myDirectionY;
+    }
+    public void showLaser() {
+        fill(255,0,0);
+        ellipse((float)myCenterX, (float)myCenterY, 5, 5);
     }
 }
 
