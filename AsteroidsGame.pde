@@ -8,12 +8,15 @@ Star[] nStar;
 public boolean gameOver = false;
 public boolean startGame = false;
 public boolean instructions = false;
+
 public int score;
+public int health;
 
 public void setup() {
     size(600, 600);
     background(0);
     score = 0;
+    health = 3;
     rocks = new ArrayList<Asteroid>();
     bullets = new ArrayList<Bullet>();
     lasers = new ArrayList<Laser>();
@@ -116,6 +119,12 @@ public void draw() {
           ufo.show();
         }
         //DRAWS AND MOVES ASTEROIDS
+        for(int l = 0; l < lasers.size(); l++){
+          if(dist((float)lasers.get(l).getX(), (float)lasers.get(l).getY(), (float)ship.getX(), (float)ship.getY())<20){
+              lasers.remove(l);
+              health = health - 1;
+            }
+        }
         for(int r = 0; r < rocks.size(); r++){
           rocks.get(r).move();
           rocks.get(r).show();
@@ -123,26 +132,28 @@ public void draw() {
           for(int b = 0; b < bullets.size(); b++){
             if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)bullets.get(b).getX(), (float)bullets.get(b).getY())<20){
               
-              if(score>50){
+              if(score>50 ){
                 lasers.add(new Laser(ufo));
               }
               rocks.remove(r);
               bullets.remove(b);
               score = score + 10;
               break;
-              
-
             }
+
             if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)ship.getX(), (float)ship.getY())<20){
-            
+            health = health - 2;
+              
+            }
+
+          }
+        }
+        if(health == 0){
               gameOver = true;
               ship.setX(300);
               ship.setY(300);
               ship.setDirectionX(0);
               ship.setDirectionY(0);
-            }
-
-          }
         }
         //CREATES SPACESHIP
         ship.controls();
@@ -157,6 +168,8 @@ public void draw() {
           lasers.get(i).move();
           lasers.get(i).showLaser();
         }
+        textSize(40);
+        fill(255,0,0);
         text("Score: " + score, 10, 10, 600, 600);
       }
   }
