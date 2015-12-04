@@ -122,7 +122,12 @@ public void draw() {
         for(int l = 0; l < lasers.size(); l++){
           if(dist((float)lasers.get(l).getX(), (float)lasers.get(l).getY(), (float)ship.getX(), (float)ship.getY())<20){
               lasers.remove(l);
-              health = health - 1;
+               gameOver = true;
+              ship.setX(300);
+              ship.setY(300);
+              ship.setDirectionX(0);
+              ship.setDirectionY(0);
+              
             }
         }
         for(int r = 0; r < rocks.size(); r++){
@@ -142,18 +147,18 @@ public void draw() {
             }
 
             if(dist((float)rocks.get(r).getX(), (float)rocks.get(r).getY(), (float)ship.getX(), (float)ship.getY())<20){
-            health = health - 2;
+             gameOver = true;
+              ship.setX(300);
+              ship.setY(300);
+              ship.setDirectionX(0);
+              ship.setDirectionY(0);
               
             }
 
           }
         }
-        if(health == 0){
-              gameOver = true;
-              ship.setX(300);
-              ship.setY(300);
-              ship.setDirectionX(0);
-              ship.setDirectionY(0);
+        if(health < 1){
+             
         }
         //CREATES SPACESHIP
         ship.controls();
