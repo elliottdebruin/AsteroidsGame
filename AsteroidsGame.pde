@@ -13,14 +13,14 @@ public int score;
 public int health;
 
 public void setup() {
-    size(600, 600);
+    size(800, 600);
     background(0);
     score = 0;
     health = 3;
     rocks = new ArrayList<Asteroid>();
     bullets = new ArrayList<Bullet>();
     lasers = new ArrayList<Laser>();
-    nStar = new Star[100];
+    nStar = new Star[200];
 
     for (int i = 0; i < nStar.length; i++) {
         nStar[i] = new Star();
@@ -28,18 +28,18 @@ public void setup() {
 }
 public void mousePressed () {
       //TRY AGAIN BUTTON
-      if(startGame == true && gameOver == true && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
+      if(startGame == true && gameOver == true && mouseX>250 && mouseX<550 && mouseY>400 && mouseY<500){
         gameOver = false;
         score = 0;
       }
       //START GAME BUTTON
-      if(startGame == false && gameOver == false && mouseX>150 && mouseX<450 && mouseY>400 && mouseY<500){
+      if(startGame == false && gameOver == false && mouseX>250 && mouseX<550 && mouseY>400 && mouseY<500){
         startGame = true;
       }
-      if(startGame == false && gameOver == false && mouseX>150 && mouseX<450 && mouseY>510 && mouseY<550){
+      if(startGame == false && gameOver == false && mouseX>250 && mouseX<550 && mouseY>510 && mouseY<550){
         instructions = true;
       }
-      if(instructions == true && mouseX>430 && mouseX<530 && mouseY>530 && mouseY<580){
+      if(instructions == true && mouseX>530 && mouseX<630 && mouseY>530 && mouseY<580){
         instructions = false;
         startGame = false;
       }
@@ -52,36 +52,36 @@ public void draw() {
 
     background(50);
     textSize(75);
-    text("ASTEROIDS", 90, 120, 600, 600);
+    text("ASTEROIDS", 190, 120, 600, 600);
 
     //START BUTTON
     fill(0);
-    rect(150,400,300,100,20);
+    rect(250,400,300,100,20);
     fill(255);
     textSize(50);
-    text("Start Game", 170, 420, 600, 600);
+    text("Start Game", 270, 420, 600, 600);
 
     fill(0);
-    rect(150,510,300,50,20);
+    rect(250,510,300,50,20);
     fill(255);
     textSize(40);
-    text("Intructions", 195, 510, 600, 600);
+    text("Intructions", 295, 510, 600, 600);
 
     if(instructions == true){
       background(50);
       textAlign(CENTER);
       textSize(50);
-      text("Controls", 0, 100, 600, 600);
+      text("Controls", 100, 100, 600, 600);
       textSize(35);
-      text("W = accelerate forward", 0, 175, 600, 600);
-      text("S = decelerate", 0, 250, 600, 600);
-      text("D = stop", 0, 325, 600, 600);
-      text("SPACE = hyperspace", 0, 400, 600, 600);
+      text("W = accelerate forward", 100, 175, 600, 600);
+      text("S = decelerate", 100, 250, 600, 600);
+      text("D = stop", 100, 325, 600, 600);
+      text("SPACE = hyperspace", 100, 400, 600, 600);
       fill(0);
-      rect(480,530,100,50,20);
+      rect(580,530,100,50,20);
       fill(255);
       textAlign(RIGHT);
-      text("Back", -30, 534, 600, 600);
+      text("Back", 70, 534, 600, 600);
       textAlign(LEFT);
     }
   }
@@ -90,16 +90,16 @@ public void draw() {
   if(startGame == true){
       //GAMEOVER SCREEN
       if(gameOver == true){
-        background(255, 0, 0);
+        background(150, 0, 0);
 
         //TEXT AND BUTTON
         textSize(75);
-        text("GAME OVER", 85, 150, 600, 600);
+        text("GAME OVER", 185, 150, 600, 600);
         fill(0);
-        rect(150,400,300,100,20);
+        rect(250,400,300,100,20);
         fill(255);
         textSize(50);
-        text("TRY AGAIN", 170, 420, 600, 600);
+        text("TRY AGAIN", 270, 420, 600, 600);
 
         
       }
@@ -826,7 +826,7 @@ class Star {
     private int x;
     private int y;
     public Star() {
-        x = (int)(Math.random() * 600);
+        x = (int)(Math.random() * 800);
         y = (int)(Math.random() * 600);
     }
 
