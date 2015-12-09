@@ -11,6 +11,7 @@ public boolean instructions = false;
 
 public int score;
 public int health;
+public int bestScore = 0;
 
 public void setup() {
     size(800, 600);
@@ -59,13 +60,13 @@ public void draw() {
     rect(250,400,300,100,20);
     fill(255);
     textSize(50);
-    text("Start Game", 280, 420, 600, 600);
+    text("Start Game", 270, 430, 600, 600);
 
     fill(0);
     rect(250,510,300,50,20);
     fill(255);
     textSize(40);
-    text("Intructions", 305, 510, 600, 600);
+    text("Intructions", 295, 520, 600, 600);
 
     if(instructions == true){
       background(50);
@@ -81,7 +82,7 @@ public void draw() {
       rect(580,530,100,50,20);
       fill(255);
       textAlign(RIGHT);
-      text("Back", 80, 534, 600, 600);
+      text("Back", 70, 544, 600, 600);
       textAlign(LEFT);
     }
   }
@@ -95,6 +96,9 @@ public void draw() {
         //TEXT AND BUTTON
         textSize(75);
         text("GAME OVER", 185, 150, 600, 600);
+        textSize(40);
+        text("Best Score: " + bestScore, 275,280,600,600);
+        text("Score: " + score, 325,330,600,600);
         fill(0);
         rect(250,400,300,100,20);
         fill(255);
@@ -105,6 +109,9 @@ public void draw() {
       }
       if(gameOver == false){
         background(0);
+        if(bestScore<score){
+          bestScore = score;
+        }
         //CREATES ARRAY OF STARS
         for (int i = 0; i < nStar.length; i++) {
           nStar[i].show();
@@ -186,7 +193,7 @@ class Asteroid extends Floater {
     
 
     public Asteroid() {
-      sizeA = 8;
+      sizeA = 6;
       if(Math.random()>0.5){
         rotAsteroid = (int)(Math.random()*2+1);
       } else {
@@ -196,22 +203,22 @@ class Asteroid extends Floater {
       corners = 8;
       xCorners = new int[corners];
       yCorners = new int[corners];
-      xCorners[0] = (int)(Math.random()*3*sizeA+3);
-      yCorners[0] = -(int)(Math.random()*2*sizeA+3);
-      xCorners[1] = (int)(Math.random()*5*sizeA+3);
-      yCorners[1] = (int)(Math.random()*1*sizeA+3);
-      xCorners[2] = (int)(Math.random()*3*sizeA+3);
-      yCorners[2] = (int)(Math.random()*4*sizeA+3);
-      xCorners[3] = (int)(Math.random()*0*sizeA+3);
-      yCorners[3] = (int)(Math.random()*2*sizeA+3);
-      xCorners[4] = -(int)(Math.random()*2*sizeA+3);
-      yCorners[4] = (int)(Math.random()*3*sizeA+3);
-      xCorners[5] = -(int)(Math.random()*4*sizeA+3);
-      yCorners[5] = (int)(Math.random()*0*sizeA+3);
-      xCorners[6] = -(int)(Math.random()*2*sizeA+3);
-      yCorners[6] = -(int)(Math.random()*3*sizeA+3);
-      xCorners[7] = (int)(Math.random()*1*sizeA+3);
-      yCorners[7] = -(int)(Math.random()*2*sizeA+3);
+      xCorners[0] = (int)(Math.random()*3*sizeA+7);
+      yCorners[0] = -(int)(Math.random()*2*sizeA+7);
+      xCorners[1] = (int)(Math.random()*5*sizeA+7);
+      yCorners[1] = (int)(Math.random()*1*sizeA+7);
+      xCorners[2] = (int)(Math.random()*3*sizeA+7);
+      yCorners[2] = (int)(Math.random()*4*sizeA+7);
+      xCorners[3] = (int)(Math.random()*0*sizeA+7);
+      yCorners[3] = (int)(Math.random()*2*sizeA+7);
+      xCorners[4] = -(int)(Math.random()*2*sizeA+7);
+      yCorners[4] = (int)(Math.random()*3*sizeA+7);
+      xCorners[5] = -(int)(Math.random()*4*sizeA+7);
+      yCorners[5] = (int)(Math.random()*0*sizeA+7);
+      xCorners[6] = -(int)(Math.random()*2*sizeA+7);
+      yCorners[6] = -(int)(Math.random()*3*sizeA+7);
+      xCorners[7] = (int)(Math.random()*1*sizeA+7);
+      yCorners[7] = -(int)(Math.random()*2*sizeA+7);
 
 
       myCenterX = (int)(Math.random()*-20);

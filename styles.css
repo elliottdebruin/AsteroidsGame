@@ -1,5 +1,5 @@
 body {
-    background-image: url('space.jpg');
+    background-image: url('purpleSpace.jpg');
     background-size:cover;
     color: rgb(255,255,255);
     font-family: "Open Sans", sans-serif;
@@ -18,7 +18,7 @@ header {
     background-color:rgba(0,0,0,.6);
     margin-top:0;
     padding:1em;
-    text-align:left;
+    text-align:center;
 }
 
 footer {
