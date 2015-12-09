@@ -59,13 +59,13 @@ public void draw() {
     rect(250,400,300,100,20);
     fill(255);
     textSize(50);
-    text("Start Game", 270, 420, 600, 600);
+    text("Start Game", 280, 420, 600, 600);
 
     fill(0);
     rect(250,510,300,50,20);
     fill(255);
     textSize(40);
-    text("Intructions", 295, 510, 600, 600);
+    text("Intructions", 305, 510, 600, 600);
 
     if(instructions == true){
       background(50);
@@ -81,7 +81,7 @@ public void draw() {
       rect(580,530,100,50,20);
       fill(255);
       textAlign(RIGHT);
-      text("Back", 70, 534, 600, 600);
+      text("Back", 80, 534, 600, 600);
       textAlign(LEFT);
     }
   }
