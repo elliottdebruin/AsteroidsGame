@@ -66,7 +66,7 @@ public void draw() {
     rect(250,510,300,50,20);
     fill(255);
     textSize(40);
-    text("Intructions", 295, 520, 600, 600);
+    text("Instructions", 295, 520, 600, 600);
 
     if(instructions == true){
       background(50);
